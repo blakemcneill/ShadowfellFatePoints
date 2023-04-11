@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import create_engine, text, Table, Column, Integer, String, MetaData, select
+from os import getenv
 
-engine = create_engine(
-    "postgresql://fatepoints_user:1hMhUuirSk8HY9bvZogU2zr5Ooj8jiCc@dpg-cgidpr9r8t1g7lorckig-a.ohio-postgres.render.com/fatepoints")
+engine = create_engine(getenv("db"))
 
 metadata_obj = MetaData()
 
