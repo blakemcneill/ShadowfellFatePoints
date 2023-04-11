@@ -22,17 +22,19 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     stmt = select(characters)
-    c_builder = '<div class="container text-left">'
     with engine.connect() as conn:
-        for row in conn.execute(stmt):
-            c_builder += "<div class = \"row\">"
-            c_builder += f"<div class = \"col\"><h1>{row.charactername}</h1></div>"
-            c_builder += f"<div class=\"col\"><h3>Heroic Points</h3><br /><p>{row.heroicpoints}</p></div>"
-            c_builder += f"<div class=\"col\"><h3>Neutral Points</h3><br /><p>{row.neutralpoints}</p></div>"
-            c_builder += f"<div class=\"col\"><h3>Villian Points</h3><br /><p>{row.villianpoints}</p></div>"
-            c_builder += '</div>'
-    c_builder += "</div>"
-    print(c_builder)
+        if conn.execute(stmt).first() is None:
+            c_builder = '<h1>No characters</h1>'
+        else:
+            c_builder = '<div class="container text-left">'
+            for row in conn.execute(stmt):
+                c_builder += "<div class = \"row\">"
+                c_builder += f"<div class = \"col\"><h1>{row.charactername}</h1></div>"
+                c_builder += f"<div class=\"col\"><h3>Heroic Points</h3><br /><p>{row.heroicpoints}</p></div>"
+                c_builder += f"<div class=\"col\"><h3>Neutral Points</h3><br /><p>{row.neutralpoints}</p></div>"
+                c_builder += f"<div class=\"col\"><h3>Villian Points</h3><br /><p>{row.villianpoints}</p></div>"
+                c_builder += '</div>'
+            c_builder += "</div>"
     return render_template('index.html', character_display=c_builder)
 
 
