@@ -22,13 +22,17 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     stmt = select(characters)
-    c_builder = '<div class="container text-center">'
+    c_builder = '<div class="container text-left">'
     with engine.connect() as conn:
         for row in conn.execute(stmt):
-            c_builder += '<div class = "row"><div class = "col">'
-            c_builder += f"<h1>{row.charactername}</h1>"
-            c_builder += '</div></div>'
+            c_builder += "<div class = \"row\">"
+            c_builder += f"<div class = \"col\"><h1>{row.charactername}</h1></div>"
+            c_builder += f"<div class=\"col\"><h3>Heroic Points</h3><br /><p>{row.heroicpoints}</p></div>"
+            c_builder += f"<div class=\"col\"><h3>Neutral Points</h3><br /><p>{row.neutralpoints}</p></div>"
+            c_builder += f"<div class=\"col\"><h3>Villian Points</h3><br /><p>{row.villianpoints}</p></div>"
+            c_builder += '</div>'
     c_builder += "</div>"
+    print(c_builder)
     return render_template('index.html', character_display=c_builder)
 
 
